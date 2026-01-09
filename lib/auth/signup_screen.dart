@@ -1,7 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:techstax/app/techstax_assets.dart';
 import 'package:techstax/auth/auth_service.dart';
+import 'package:techstax/auth/login_screen.dart';
 import 'package:techstax/dashboard/dasboard_screen.dart';
 import 'package:techstax/widget/add_text_filed.dart';
 
@@ -142,7 +144,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             width: 22,
                             child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black),
                           )
-                        : Text("Log In", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                        : Text("Sign Up", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                   ),
                 ),
 
@@ -185,15 +187,20 @@ class _SignupScreenState extends State<SignupScreen> {
                 // Sign Up
                 Center(
                   child: RichText(
-                    text: const TextSpan(
+                    text:  TextSpan(
                       children: [
                         TextSpan(
                           text: "Don’t have an account? ",
                           style: TextStyle(color: Color(0xFF9FB3C8)),
                         ),
                         TextSpan(
-                          text: "Sign Up",
+                          text: "Login",
                           style: TextStyle(color: Color(0xFFF5C86A), fontWeight: FontWeight.w600),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                             Navigator.push(context, MaterialPageRoute(builder: (context) =>  LoginScreen()));
+                            },
+
                         ),
                       ],
                     ),
@@ -209,101 +216,3 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 }
-
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-// import 'package:techstax/dashboard/dasboard_screen.dart';
-// import 'auth_service.dart';
-
-// class SignupScreen extends StatefulWidget {
-//   const SignupScreen({super.key});
-
-//   @override
-//   State<SignupScreen> createState() => _SignupScreenState();
-// }
-
-// class _SignupScreenState extends State<SignupScreen> {
-//   final email = TextEditingController();
-//   final password = TextEditingController();
-
-//   bool _isLoading = false;
-
-// Future<void> _handleSignup(BuildContext context) async {
-//   setState(() => _isLoading = true);
-
-//   try {
-//     await context.read<AuthService>().signup(
-//           email.text.trim(),
-//           password.text.trim(),
-//         );
-
-//     if (!mounted) return;
-
-//     Navigator.pushAndRemoveUntil(
-//       context,
-//       MaterialPageRoute(
-//         builder: (_) => const DashboardScreen(),
-//       ),
-//       (route) => false, // removes all previous routes
-//     );
-//   } catch (e) {
-//     if (mounted) {
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         SnackBar(content: Text(e.toString())),
-//       );
-//     }
-//   } finally {
-//     if (mounted) setState(() => _isLoading = false);
-//   }
-// }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text("Sign Up")),
-//       body: Padding(
-//         padding: const EdgeInsets.all(20),
-//         child: Column(
-//           children: [
-//             TextField(
-//               controller: email,
-//               decoration: const InputDecoration(hintText: "Email"),
-//             ),
-//             const SizedBox(height: 12),
-//             TextField(
-//               controller: password,
-//               obscureText: true,
-//               decoration: const InputDecoration(hintText: "Password"),
-//             ),
-//             const SizedBox(height: 24),
-
-//             SizedBox(
-//               width: double.infinity,
-//               height: 48,
-//               child: ElevatedButton(
-//                 onPressed: _isLoading ? null : () => _handleSignup(context),
-//                 child: _isLoading
-//                     ? const SizedBox(
-//                         height: 22,
-//                         width: 22,
-//                         child: CircularProgressIndicator(
-//                           strokeWidth: 2,
-//                           color: Colors.black,
-//                         ),
-//                       )
-//                     : const Text("Create Account"),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   @override
-//   void dispose() {
-//     email.dispose();
-//     password.dispose();
-//     super.dispose();
-//   }
-// }
